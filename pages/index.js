@@ -118,23 +118,23 @@ export default function Home() {
   .container {
     font-family: "Orbitron", sans-serif;
     text-align: center;
-    padding: 50px;
+    padding: 40px 20px;
     background-color: #000;
     color: #ccc;
     min-height: 100vh;
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: #fff;
-    letter-spacing: 2px;
-    margin-bottom: 50px;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
   }
 
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: #888;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 1px;
   }
@@ -143,20 +143,25 @@ export default function Home() {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-    margin-bottom: 50px;
+    gap: 15px;
+    margin-bottom: 40px;
   }
 
   .btn {
-    padding: 16px 28px;
+    padding: 14px 20px;
     border-radius: 8px;
     background-color: #111;
     color: #eee;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1rem;
     border: 2px solid #444;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+    flex: 1 1 40%; /* responsive buttons */
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .btn:hover {
@@ -175,23 +180,63 @@ export default function Home() {
   .leaderboard {
     margin: 0 auto;
     border-collapse: collapse;
-    min-width: 400px;
+    width: 100%;
+    max-width: 400px;
     color: #ccc;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .leaderboard th, .leaderboard td {
-    padding: 12px 20px;
+    padding: 10px 12px;
     border-bottom: 1px solid #222;
     text-align: center;
   }
 
   .leaderboard tr.top {
-    background-color: #000;
+    background-color: #111;
     color: #fff;
     font-weight: bold;
   }
+
+  /* === MEDIA QUERIES POUR MOBILE === */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      font-size: 1.2rem;
+    }
+    .btn {
+      flex: 1 1 80%; /* les boutons prennent plus de place */
+      font-size: 0.95rem;
+      padding: 12px 16px;
+    }
+    .leaderboard {
+      font-size: 0.9rem;
+    }
+    .leaderboard th, .leaderboard td {
+      padding: 8px 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.8rem;
+    }
+    h2 {
+      font-size: 1rem;
+    }
+    .btn {
+      flex: 1 1 100%;
+      font-size: 0.9rem;
+      padding: 10px 12px;
+    }
+    .leaderboard {
+      max-width: 100%;
+    }
+  }
 `}</style>
+
 
     </div>
   );
