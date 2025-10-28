@@ -115,60 +115,94 @@ export default function Home() {
       </table>
 
       <style jsx>{`
-        .container {
-          font-family: "Segoe UI", sans-serif;
-          text-align: center;
-          padding: 20px;
-          background: #000;
-          color: #ccc;
-          min-height: 100vh;
-        }
+  .container {
+    font-family: "Orbitron", sans-serif; /* techno/luxury vibe */
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, #000000 0%, #111111 100%);
+    color: #eee;
+    min-height: 100vh;
+  }
 
-        h1, h2 { color: #eee; }
+  h1 {
+    font-size: 3rem;
+    color: #FFD700; /* gold */
+    text-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500;
+    margin-bottom: 40px;
+  }
 
-        .participants {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 10px;
-          margin-bottom: 40px;
-        }
+  h2 {
+    font-size: 1.8rem;
+    color: #ccc;
+    margin-bottom: 20px;
+  }
 
-        .btn {
-          padding: 12px 20px;
-          border-radius: 8px;
-          background: #333;
-          color: #eee;
-          border: 2px solid #555;
-          cursor: pointer;
-          font-size: 16px;
-          transition: all 0.2s;
-        }
+  .participants {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 50px;
+  }
 
-        .btn:hover { background: #555; }
+  .btn {
+    padding: 16px 28px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1a1a1a, #333333);
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 2px solid #FFD700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px #FFD70044, 0 0 20px #FFD70022;
+  }
 
-        .btn.running {
-          background: #e74c3c;
-          border-color: #c0392b;
-        }
+  .btn:hover {
+    background: linear-gradient(145deg, #222222, #555555);
+    box-shadow: 0 0 20px #FFD70088, 0 0 30px #FFA50044;
+    transform: translateY(-2px) scale(1.05);
+  }
 
-        .leaderboard {
-          margin: 0 auto;
-          border-collapse: collapse;
-          min-width: 300px;
-          color: #eee;
-        }
+  .btn.running {
+    background: linear-gradient(145deg, #C0392B, #E74C3C);
+    border-color: #FF8C00;
+    box-shadow: 0 0 15px #FF8C00, 0 0 30px #FFD70066;
+    color: #fff;
+  }
 
-        .leaderboard th, .leaderboard td {
-          padding: 8px 12px;
-          border-bottom: 1px solid #444;
-        }
+  .leaderboard {
+    margin: 0 auto;
+    border-collapse: collapse;
+    min-width: 400px;
+    color: #eee;
+    font-size: 1.1rem;
+  }
 
-        .leaderboard tr.top {
-          background: #444;
-          font-weight: bold;
-        }
-      `}</style>
+  .leaderboard th, .leaderboard td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #444;
+    text-align: center;
+  }
+
+  .leaderboard tr.top {
+    background: #222;
+    color: #FFD700;
+    font-weight: bold;
+    box-shadow: 0 0 15px #FFD70055 inset;
+  }
+
+  /* subtle animation on top row */
+  .leaderboard tr.top td {
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes glow {
+    0% { text-shadow: 0 0 5px #FFD700, 0 0 10px #FFA500; }
+    100% { text-shadow: 0 0 15px #FFD700, 0 0 25px #FFA500; }
+  }
+`}</style>
+
     </div>
   );
 }
