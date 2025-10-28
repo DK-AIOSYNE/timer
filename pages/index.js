@@ -5,9 +5,10 @@ const NAMES = ["Arno","Arthur","Charles","Orso","Martin","Antoine","Simon","Ferd
 
 export default function Home() {
   const [leaderboard, setLeaderboard] = useState([]);
-  const [running, setRunning] = useState(null); // name of current runner
+  const [running, setRunning] = useState(null); // current runner
   const [startTime, setStartTime] = useState(null);
   const [elapsed, setElapsed] = useState(0);
+  const [active, setActive] = useState(true); // whether tab is active
 
   // Fetch leaderboard
   async function load() {
@@ -15,79 +16,159 @@ export default function Home() {
     setLeaderboard(await res.json());
   }
 
-  useEffect(() => { load(); const i = setInterval(load, 5000); return () => clearInterval(i); }, []);
+  useEffect(() => { 
+    load(); 
+    const i = setInterval(load, 5000); 
+    return () => clearInterval(i); 
+  }, []);
 
   async function toggle(name) {
     if (running === name) {
-      // Stop
-      const seconds = Math.floor((Date.now() - startTime) / 1000);
-      await fetch("/api/data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, seconds })
-      });
-      setRunning(null);
-      setStartTime(null);
-      setElapsed(0);
-      load();
+      stopTimer(name);
     } else {
-      // Start new
       setRunning(name);
       setStartTime(Date.now());
+      setElapsed(0);
     }
   }
 
+  async function stopTimer(name) {
+    const seconds = Math.floor((Date.now() - startTime) / 1000);
+    await fetch("/api/data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, seconds })
+    });
+    setRunning(null);
+    setStartTime(null);
+    setElapsed(0);
+    load();
+  }
+
+  // Update elapsed time
   useEffect(() => {
-    if (!running) return;
-    const i = setInterval(() => setElapsed(Math.floor((Date.now() - startTime) / 1000)), 500);
+    if (!running || !active) return;
+
+    const i = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTime) / 1000));
+    }, 500);
+
     return () => clearInterval(i);
+  }, [running, startTime, active]);
+
+  // Stop timer if tab inactive or user closes page
+  useEffect(() => {
+    function handleVisibility() {
+      setActive(!document.hidden);
+      if (document.hidden && running) stopTimer(running);
+    }
+
+    function handleBeforeUnload() {
+      if (running) stopTimer(running);
+    }
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    }
   }, [running, startTime]);
 
   function format(s) {
     const m = Math.floor(s / 60);
     const sec = s % 60;
-    return `${m}:${String(sec).padStart(2, "0")}`;
+    return `${m}:${String(sec).padStart(2,"0")}`;
   }
 
   return (
-    <div style={{ fontFamily: "sans-serif", textAlign: "center", padding: 20 }}>
+    <div className="container">
       <h1>⏱️ Focus Timer</h1>
 
       <h2>Participants</h2>
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10 }}>
+      <div className="participants">
         {NAMES.map(name => (
           <button
             key={name}
             onClick={() => toggle(name)}
-            style={{
-              padding: "10px 16px",
-              borderRadius: 8,
-              background: running === name ? "#e74c3c" : "#2ecc71",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "16px"
-            }}
+            className={running === name ? "btn running" : "btn"}
           >
-            {running === name ? `Stop ${name} (${format(elapsed)})` : `Start ${name}`}
+            {running === name ? `${name} (${format(elapsed)})` : name}
           </button>
         ))}
       </div>
 
-      <h2 style={{ marginTop: 40 }}>Classement</h2>
-      <table style={{ margin: "0 auto", borderCollapse: "collapse", minWidth: 300 }}>
+      <h2>Classement</h2>
+      <table className="leaderboard">
         <thead>
           <tr><th>Nom</th><th>Temps total</th></tr>
         </thead>
         <tbody>
           {leaderboard.map((u, i) => (
-            <tr key={u.name} style={{ background: i===0 ? "#ffd70066" : "transparent" }}>
-              <td style={{ padding: "6px 12px" }}>{u.name}</td>
-              <td style={{ padding: "6px 12px" }}>{format(u.total)}</td>
+            <tr key={u.name} className={i===0 ? "top" : ""}>
+              <td>{u.name}</td>
+              <td>{format(u.total)}</td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <style jsx>{`
+        .container {
+          font-family: "Segoe UI", sans-serif;
+          text-align: center;
+          padding: 20px;
+          background: #000;
+          color: #ccc;
+          min-height: 100vh;
+        }
+
+        h1, h2 { color: #eee; }
+
+        .participants {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 10px;
+          margin-bottom: 40px;
+        }
+
+        .btn {
+          padding: 12px 20px;
+          border-radius: 8px;
+          background: #333;
+          color: #eee;
+          border: 2px solid #555;
+          cursor: pointer;
+          font-size: 16px;
+          transition: all 0.2s;
+        }
+
+        .btn:hover { background: #555; }
+
+        .btn.running {
+          background: #e74c3c;
+          border-color: #c0392b;
+        }
+
+        .leaderboard {
+          margin: 0 auto;
+          border-collapse: collapse;
+          min-width: 300px;
+          color: #eee;
+        }
+
+        .leaderboard th, .leaderboard td {
+          padding: 8px 12px;
+          border-bottom: 1px solid #444;
+        }
+
+        .leaderboard tr.top {
+          background: #444;
+          font-weight: bold;
+        }
+      `}</style>
     </div>
   );
 }
