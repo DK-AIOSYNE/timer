@@ -1,0 +1,10 @@
+body {
+  background: #fafafa;
+  margin: 0;
+}
+table, th, td {
+  border: 1px solid #ddd;
+}
+th {
+  background: #eee;
+}
