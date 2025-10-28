@@ -84,7 +84,7 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>⏱️ Focus Timer</h1>
+      <h1>FOCUS</h1>
 
       <h2>Participants</h2>
       <div className="participants">
@@ -187,7 +187,7 @@ export default function Home() {
   }
 
   .leaderboard tr.top {
-    background-color: #111;
+    background-color: #000;
     color: #fff;
     font-weight: bold;
   }
