@@ -193,7 +193,7 @@ export default function Home() {
   }
 
   .leaderboard tr.top {
-    background-color: #111;
+    background-color: #000;
     color: #fff;
     font-weight: bold;
   }
