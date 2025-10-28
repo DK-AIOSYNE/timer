@@ -190,6 +190,7 @@ export default function Home() {
     padding: 10px 12px;
     border-bottom: 1px solid #222;
     text-align: center;
+    color: #888
   }
 
   .leaderboard tr.top {
